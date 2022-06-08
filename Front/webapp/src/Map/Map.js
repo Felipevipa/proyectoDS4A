@@ -27,6 +27,18 @@ const Map = ({ children, zoom, center }) => {
   // center change handler
   useEffect(() => {
     if (!map) return;
+    const projection = map.getView().getProjection()
+    console.log(projection)
+    const geoLocation = new ol.Geolocation({
+      trackingOptions: {
+        enableHighAccuracy: true,
+      },
+      projection: projection,
+    })
+    console.log(geoLocation)
+    console.log(geoLocation.getPosition())
+
+
     map.getView().setCenter(center)
   }, [center])
   return (

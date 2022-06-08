@@ -10,11 +10,12 @@ import { fromLonLat, get } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON";
 import { Controls, FullScreenControl } from "./Controls";
 import { transform } from "ol/proj";
-import { Geolocation } from "ol";
+import { Geolocation, View } from "ol";
 import FeatureStyles from "./Features/Styles";
 
 import mapConfig from "./config.json";
 import "./App.css";
+import CurrentLocation from "./Utilities/CurrentLocation";
 
 const geojsonObject = mapConfig.geojsonObject;
 const geojsonObject2 = mapConfig.geojsonObject2;
@@ -57,6 +58,7 @@ function addLine(lonLatArray) {
 }
 
 
+
 const App = () => {
   const [center, setCenter] = useState(mapConfig.center);
   const [zoom, setZoom] = useState(14);
@@ -91,6 +93,7 @@ const App = () => {
               <br />
               <button className="btn btn-success submit-button" type="submit"> Encontrar tiempo </button>
           </form>
+          {/* <button className="btn btn-success submit-button" onClick={getCurrentLocation}> Encontrar posición actual </button> */}
         </div>
         <div className="link-section">
           <a href="https://www.transmilenio.gov.co/" target="_blank">Ir a pagina Transmilenio</a> |
@@ -101,6 +104,7 @@ const App = () => {
         Encuentra el tiempo que tomara tu viaje
       </div>
       <Map center={fromLonLat(center)} zoom={zoom}>
+        <CurrentLocation />
         <Layers>
           <TileLayer source={osm()} zIndex={0} />
           {showLayer1 && (
