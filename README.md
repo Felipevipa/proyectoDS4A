@@ -1,6 +1,6 @@
-##To exec this project:
+## To exec this project:
 
-###Frontend
+### Frontend
 1. Clone the repository
 2. Get into path "Front/webapp"
 3. Open Terminal
