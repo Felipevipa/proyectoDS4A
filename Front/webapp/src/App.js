@@ -22,7 +22,8 @@ const geojsonObject2 = mapConfig.geojsonObject2;
 const markersLonLat = [mapConfig.bogotaCityLonLat, mapConfig.blueSpringsLonLat];
 
 
-
+let campo = 0
+let outFeatures = []
 
 const App = () => {
   const [center, setCenter] = useState(mapConfig.center);
@@ -92,6 +93,7 @@ const App = () => {
   useEffect(() => {
     console.log(features)
     setShowMarker(true)
+    outFeatures = features
   }, [features])
 
   useEffect(() => {
@@ -109,12 +111,14 @@ const App = () => {
     setShowMarker(false)
     // setFeatures(addMarkers([lonlat,[-74.10031803719421, 4.6066443389633065]]).concat(features))
     console.log("comparacion", numeroCampo == 0)
-    if (numeroCampo == 0) {
-      setFeatures([addPoint(lonlat), features[0], addLine([lonlat, transform(features[0].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
+    if (campo == 0) {
+      setFeatures([addPoint(lonlat), outFeatures[1], addLine([lonlat, transform(outFeatures[1].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
       setPuntoSalida(lonlat)
+      campo = 1;
     } else {
-      setFeatures([features[0], addPoint(lonlat), addLine([lonlat, transform(features[0].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
+      setFeatures([outFeatures[0], addPoint(lonlat), addLine([lonlat, transform(outFeatures[0].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
       setPuntoLlegada(lonlat)
+      campo = 0
     }
     
   }
@@ -135,16 +139,17 @@ const App = () => {
           <div className="horizontal-line"></div>
           <form className="main-form">
               Punto de salida:
-              <input className="form-control icon-input-ubicacion" value={puntoSalida} onChange={(event) => {setPuntoSalida(event.target.value);}}/>
+              <input className="form-control icon-input-ubicacion" value={puntoSalida} onChange={(event) => {setPuntoSalida(event.target.value);}} onClick={() => campo = 0} required/>
               <br />
               Punto de llegada:
-              <input className="form-control icon-input-ubicacion" value={puntoLlegada} onChange={(event) => {setPuntoLlegada(event.target.value);}}/>
+              <input className="form-control icon-input-ubicacion" value={puntoLlegada} onChange={(event) => {setPuntoLlegada(event.target.value);}} onClick={() => campo = 1} required/>
               <br />
               Hora de salida:
-              <input className="form-control icon-input-reloj" type="time"/>
+              <input className="form-control icon-input-reloj" type="time" required/>
               <br />
               <br />
               <button className="btn btn-success submit-button" type="submit"> Encontrar tiempo </button>
+              <button className="btn btn-success submit-button" onClick={() => {setPuntoSalida("");setPuntoLlegada("")}}> Limpiar Formulario </button>
           </form>
           {/* <button className="btn btn-success submit-button" onClick={getCurrentLocation}> Encontrar posición actual </button> */}
         </div>
@@ -167,31 +172,6 @@ const App = () => {
           <FullScreenControl />
         </Controls>
       </Map> 
-      {/* <div>
-        <input
-          type="checkbox"
-          checked={showLayer1}
-          onChange={(event) => setShowLayer1(event.target.checked)}
-        />{" "}
-        Johnson County
-      </div>
-      <div>
-        <input
-          type="checkbox"
-          checked={showLayer2}
-          onChange={(event) => setShowLayer2(event.target.checked)}
-        />{" "}
-        Wyandotte County
-      </div>
-      <hr /> */}
-      {/* <div>
-        <input
-          type="checkbox"
-          checked={showMarker}
-          onChange={(event) => setShowMarker(event.target.checked)}
-        />{" "}
-        Show markers
-      </div> */}
     </div>
   );
 };
