@@ -7,22 +7,16 @@ function CurrentLocation() {
   useEffect(() => {
 
     if (!map) return;
-    console.log(map)
-    var geolocation = new Geolocation({
-        // enableHighAccuracy must be set to true to have the heading value.
-        trackingOptions: {
-          enableHighAccuracy: true
-        },
-        projection: map.getView().getProjection()
-    });
-    // map.addLayer(vectorLayer);
-    // vectorLayer.setZIndex(zIndex);
-    // return () => {
-    //   if (map) {
-    //     map.removeLayer(vectorLayer);
-    //   }
-    // };
-    console.log(geolocation.getPosition())
+    const projection = map.getView().getProjection()
+    console.log(projection)
+    const geoLocation = new Geolocation({
+      trackingOptions: {
+        enableHighAccuracy: true,
+      },
+      projection: projection,
+    })
+    console.log(geoLocation)
+    console.log(geoLocation.getPosition())
   }, []);
   return null;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Map from "./Map";
 import { Layers, TileLayer, VectorLayer } from "./Layers";
 import { Style, Icon, Fill, Stroke } from "ol/style";
@@ -21,41 +21,6 @@ const geojsonObject = mapConfig.geojsonObject;
 const geojsonObject2 = mapConfig.geojsonObject2;
 const markersLonLat = [mapConfig.bogotaCityLonLat, mapConfig.blueSpringsLonLat];
 
-function addMarkers(lonLatArray) {
-  var iconStyle = new Style({
-    image: new Icon({
-      anchor:[0.5, 30],
-      anchorXUnits: "fraction",
-      anchorYUnits: "pixels",
-      src: mapConfig.markerImage32,
-    }),
-  });
-  let features = lonLatArray.map((item) => {
-    let feature = new Feature({
-      geometry: new Point(fromLonLat(item)),
-    });
-    feature.setStyle(iconStyle);
-    return feature;
-  });
-  features.push(addLine(lonLatArray))
-  return features;
-}
-
-function addLine(lonLatArray) {
-  let points = [ lonLatArray[0], lonLatArray[1] ]
-  for (let i = 0; i < points.length; i++) {
-    points[i] = transform(points[i], 'EPSG:4326', 'EPSG:3857');
-  }
-  let feature = new Feature({
-    geometry: new LineString(points)
-  })
-  feature.setStyle(new Style({
-    fill: new Fill({ color: '#000000', weight: 4 }),
-    stroke: new Stroke({ color: '#000000', width: 2 })
-  }))
-
-  return feature
-}
 
 
 
@@ -68,6 +33,94 @@ const App = () => {
   const [showMarker, setShowMarker] = useState(true);
 
   const [features, setFeatures] = useState(addMarkers(markersLonLat));
+  const [puntoSalida, setPuntoSalida] = useState("")
+  const [puntoLlegada, setPuntoLlegada] = useState("")
+  const [numeroCampo, setNumeroCampo] = useState(0)
+
+  function addMarkers(lonLatArray) {
+    var iconStyle = new Style({
+      image: new Icon({
+        anchor:[0.5, 30],
+        anchorXUnits: "fraction",
+        anchorYUnits: "pixels",
+        src: mapConfig.markerImage32,
+      }),
+    });
+    let features = lonLatArray.map((item) => {
+      let feature = new Feature({
+        geometry: new Point(fromLonLat(item)),
+      });
+      feature.setStyle(iconStyle);
+      return feature;
+    });
+    features.push(addLine(lonLatArray))
+    return features;
+  }
+  
+  function addLine(lonLatArray) {
+    let points = [ lonLatArray[0], lonLatArray[1] ]
+    for (let i = 0; i < points.length; i++) {
+      points[i] = transform(points[i], 'EPSG:4326', 'EPSG:3857');
+    }
+    let feature = new Feature({
+      geometry: new LineString(points)
+    })
+    feature.setStyle(new Style({
+      fill: new Fill({ color: '#000000', weight: 4 }),
+      stroke: new Stroke({ color: '#000000', width: 2 })
+    }))
+    return feature
+  }
+
+  function addPoint(point) {
+    // point = transform(point.coordinate, 'EPSG:3857', 'EPSG:4326');
+    let iconStyle = new Style({
+      image: new Icon({
+        anchor:[0.5, 30],
+        anchorXUnits: "fraction",
+        anchorYUnits: "pixels",
+        src: mapConfig.markerImage32,
+      }),
+    });
+    let feature = new Feature({
+      geometry: new Point(fromLonLat(point)),
+    });
+    feature.setStyle(iconStyle);
+    return feature;
+  }
+
+  useEffect(() => {
+    console.log(features)
+    setShowMarker(true)
+  }, [features])
+
+  useEffect(() => {
+    console.log(showMarker)    
+  }, [showMarker])
+
+  useEffect(() => {
+    console.log(numeroCampo)
+  }, [numeroCampo])
+
+
+  const handleClick = (evt) => {
+    var lonlat = transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+    console.log(lonlat)
+    setShowMarker(false)
+    // setFeatures(addMarkers([lonlat,[-74.10031803719421, 4.6066443389633065]]).concat(features))
+    console.log("comparacion", numeroCampo == 0)
+    if (numeroCampo == 0) {
+      setFeatures([addPoint(lonlat), features[0], addLine([lonlat, transform(features[0].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
+      setPuntoSalida(lonlat)
+    } else {
+      setFeatures([features[0], addPoint(lonlat), addLine([lonlat, transform(features[0].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
+      setPuntoLlegada(lonlat)
+    }
+    
+  }
+
+  
+
 
   return (
     <div className="App">
@@ -82,13 +135,13 @@ const App = () => {
           <div className="horizontal-line"></div>
           <form className="main-form">
               Punto de salida:
-              <input className="form-control icon-input-ubicacion" />
+              <input className="form-control icon-input-ubicacion" value={puntoSalida} onChange={(event) => {setPuntoSalida(event.target.value);}}/>
               <br />
               Punto de llegada:
-              <input className="form-control icon-input-ubicacion" />
+              <input className="form-control icon-input-ubicacion" value={puntoLlegada} onChange={(event) => {setPuntoLlegada(event.target.value);}}/>
               <br />
               Hora de salida:
-              <input className="form-control icon-input-reloj" />
+              <input className="form-control icon-input-reloj" type="time"/>
               <br />
               <br />
               <button className="btn btn-success submit-button" type="submit"> Encontrar tiempo </button>
@@ -103,37 +156,18 @@ const App = () => {
       <div className="main-title">
         Encuentra el tiempo que tomara tu viaje
       </div>
-      <Map center={fromLonLat(center)} zoom={zoom}>
+      <Map center={fromLonLat(center)} zoom={zoom} handleClick={handleClick} numeroCampo={numeroCampo} >
         <CurrentLocation />
         <Layers>
           <TileLayer source={osm()} zIndex={0} />
-          {showLayer1 && (
-            <VectorLayer
-              source={vector({
-                features: new GeoJSON().readFeatures(geojsonObject, {
-                  featureProjection: get("EPSG:3857"),
-                }),
-              })}
-              style={FeatureStyles.MultiPolygon}
-            />
-          )}
-          {showLayer2 && (
-            <VectorLayer
-              source={vector({
-                features: new GeoJSON().readFeatures(geojsonObject2, {
-                  featureProjection: get("EPSG:3857"),
-                }),
-              })}
-              style={FeatureStyles.MultiPolygon}
-            />
-          )}
+
           {showMarker && <VectorLayer source={vector({ features })} />}
         </Layers>
         <Controls>
           <FullScreenControl />
         </Controls>
       </Map> 
-      <div>
+      {/* <div>
         <input
           type="checkbox"
           checked={showLayer1}
@@ -149,15 +183,15 @@ const App = () => {
         />{" "}
         Wyandotte County
       </div>
-      <hr />
-      <div>
+      <hr /> */}
+      {/* <div>
         <input
           type="checkbox"
           checked={showMarker}
           onChange={(event) => setShowMarker(event.target.checked)}
         />{" "}
         Show markers
-      </div>
+      </div> */}
     </div>
   );
 };

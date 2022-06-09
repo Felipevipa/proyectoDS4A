@@ -2,12 +2,15 @@ import React, { useRef, useState, useEffect } from "react"
 import "./Map.css";
 import MapContext from "./MapContext";
 import * as ol from "ol";
+import { transform } from "ol/proj";
 
-const Map = ({ children, zoom, center }) => {
+const Map = ({ children, zoom, center, handleClick, numeroCampo}) => {
   const mapRef = useRef();
   const [map, setMap] = useState(null);
+
   // on component mount
   useEffect(() => {
+    
     let options = {
       view: new ol.View({ zoom, center }),
       layers: [],
@@ -16,31 +19,24 @@ const Map = ({ children, zoom, center }) => {
     };
     let mapObject = new ol.Map(options);
     mapObject.setTarget(mapRef.current);
+    mapObject.on('click', handleClick)
     setMap(mapObject);
     return () => mapObject.setTarget(undefined);
   }, []);
+
   // zoom change handler
   useEffect(() => {
     if (!map) return;
     map.getView().setZoom(zoom);
   }, [zoom]);
+
+
+
   // center change handler
   useEffect(() => {
     if (!map) return;
-    const projection = map.getView().getProjection()
-    console.log(projection)
-    const geoLocation = new ol.Geolocation({
-      trackingOptions: {
-        enableHighAccuracy: true,
-      },
-      projection: projection,
-    })
-    console.log(geoLocation)
-    console.log(geoLocation.getPosition())
-
-
-    map.getView().setCenter(center)
-  }, [center])
+     map.getView().setCenter(center)
+  }, [])
   return (
     <MapContext.Provider value={{ map }}>
       <div ref={mapRef} className="ol-map">
