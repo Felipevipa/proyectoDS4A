@@ -17,6 +17,8 @@ import mapConfig from "./config.json";
 import "./App.css";
 import CurrentLocation from "./Utilities/CurrentLocation";
 
+import { Link } from 'react-router-dom'
+
 const geojsonObject = mapConfig.geojsonObject;
 const geojsonObject2 = mapConfig.geojsonObject2;
 const markersLonLat = [mapConfig.bogotaCityLonLat, mapConfig.blueSpringsLonLat];
@@ -155,7 +157,7 @@ const App = () => {
         </div>
         <div className="link-section">
           <a href="https://www.transmilenio.gov.co/" target="_blank">Ir a pagina Transmilenio</a> |
-          <a href="#"> Equipo de desarrollo</a>
+          <Link to="/EDA"> Equipo de desarrollo</Link>
         </div>
       </div>
       <div className="main-title">
