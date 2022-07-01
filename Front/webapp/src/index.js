@@ -7,12 +7,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EDA from './EDA';
 import EquipoDesarrollo from './EquipoDesarrollo';
 import Footer from './Footer';
+import ScrollToTop from './ScrollToTop';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/equipo-de-desarrollo" element={<EquipoDesarrollo />} />
