@@ -38,12 +38,14 @@ const App = () => {
   const [features, setFeatures] = useState(addMarkers(markersLonLat));
   const [puntoSalida, setPuntoSalida] = useState("")
   const [puntoLlegada, setPuntoLlegada] = useState("")
+  const [hora, setHora] = useState("")
+  const [showForm, setShowForm] = useState(true)
   const [numeroCampo, setNumeroCampo] = useState(0)
 
   function addMarkers(lonLatArray) {
     var iconStyle = new Style({
       image: new Icon({
-        anchor:[0.5, 30],
+        anchor: [0.5, 30],
         anchorXUnits: "fraction",
         anchorYUnits: "pixels",
         src: mapConfig.markerImage32,
@@ -59,9 +61,9 @@ const App = () => {
     features.push(addLine(lonLatArray))
     return features;
   }
-  
+
   function addLine(lonLatArray) {
-    let points = [ lonLatArray[0], lonLatArray[1] ]
+    let points = [lonLatArray[0], lonLatArray[1]]
     for (let i = 0; i < points.length; i++) {
       points[i] = transform(points[i], 'EPSG:4326', 'EPSG:3857');
     }
@@ -79,7 +81,7 @@ const App = () => {
     // point = transform(point.coordinate, 'EPSG:3857', 'EPSG:4326');
     let iconStyle = new Style({
       image: new Icon({
-        anchor:[0.5, 30],
+        anchor: [0.5, 30],
         anchorXUnits: "fraction",
         anchorYUnits: "pixels",
         src: mapConfig.markerImage32,
@@ -99,7 +101,7 @@ const App = () => {
   }, [features])
 
   useEffect(() => {
-    console.log(showMarker)    
+    console.log(showMarker)
   }, [showMarker])
 
   useEffect(() => {
@@ -122,37 +124,66 @@ const App = () => {
       setPuntoLlegada(lonlat)
       campo = 0
     }
-    
+
   }
 
-  
+  const encontrarTiempo = (e) => {
+    e.preventDefault()
+    setShowForm(false)
+  }
 
 
   return (
     <div className="App">
       <div className="main-sidebar">
         <div className="logos">
-          <img src="logoTransmilenio.png" className="small-image"/>
+          <img src="logoTransmilenio.png" className="small-image" />
           <div className="vertical-line"></div>
-          <img src="logoSitp.png" className="small-image"/>
+          <img src="logoSitp.png" className="small-image" />
         </div>
+        {!showForm &&
+          <div>
+            <button className='btn btn-success submit-button' style={{ marginLeft: "50px" }} onClick={e => setShowForm(true)}>Volver</button>
+          </div>}
         <div className="formulario">
           <h3>Datos del viaje:</h3>
           <div className="horizontal-line"></div>
-          <form className="main-form">
+          {showForm &&
+            <form className="main-form" onSubmit={e => encontrarTiempo(e)}>
               Punto de salida:
-              <input className="form-control icon-input-ubicacion" value={puntoSalida} onChange={(event) => {setPuntoSalida(event.target.value);}} onClick={() => campo = 0} required/>
+              <input className="form-control icon-input-ubicacion" value={puntoSalida} onChange={(event) => { setPuntoSalida(event.target.value); }} onClick={() => campo = 0} required />
               <br />
               Punto de llegada:
-              <input className="form-control icon-input-ubicacion" value={puntoLlegada} onChange={(event) => {setPuntoLlegada(event.target.value);}} onClick={() => campo = 1} required/>
+              <input className="form-control icon-input-ubicacion" value={puntoLlegada} onChange={(event) => { setPuntoLlegada(event.target.value); }} onClick={() => campo = 1} required />
               <br />
               Hora de salida:
-              <input className="form-control icon-input-reloj" type="time" required/>
+              <input className="form-control icon-input-reloj" type="time" value={hora} onChange={e => setHora(e.target.value)} required />
               <br />
               <br />
               <button className="btn btn-success submit-button" type="submit"> Encontrar tiempo </button>
-              <button className="btn btn-success submit-button" onClick={() => {setPuntoSalida("");setPuntoLlegada("")}}> Limpiar Formulario </button>
-          </form>
+              <button className="btn btn-success submit-button" onClick={() => { setPuntoSalida(""); setPuntoLlegada(""); setHora("") }}> Limpiar Formulario </button>
+            </form>
+          }
+          {!showForm &&
+            <div>
+              <div className="main-form">
+                <p>Punto de salida:</p>
+                <p className="icon-input-ubicacion">{puntoSalida}</p><br />
+                <p>Punto de llegada:</p>
+                <p className="icon-input-ubicacion">{puntoLlegada}</p><br />
+                <p>Hora de salida:</p>
+                <p className="icon-input-reloj">{hora}</p>
+              </div>
+              <h3>Tiempo estimado:</h3>
+              <div className="horizontal-line"></div>
+              <div className="main-form">
+                <p>Deberias llegar a tu destino a las:</p>
+                <p className="icon-input-reloj">{hora}</p><br/>
+                <p>Tiempo total:</p>
+                <p className="icon-input-reloj">{hora}</p><br/>
+              </div>
+            </div>
+          }
           {/* <button className="btn btn-success submit-button" onClick={getCurrentLocation}> Encontrar posición actual </button> */}
         </div>
         <div className="link-section">
@@ -173,7 +204,7 @@ const App = () => {
         <Controls>
           <FullScreenControl />
         </Controls>
-      </Map> 
+      </Map>
     </div>
   );
 };
