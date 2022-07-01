@@ -60,11 +60,11 @@ function Footer() {
                     <div><a href='#'><img src="/icons/logoTransmilenio.png" /></a></div>
                     <br />
                     <div>
-                        <a href='#'><img className='footer-icon' src="/icons/facebookIcon.png" /></a>
-                        <a href='#'><img className='footer-icon' src="/icons/twitterIcon.png" /></a>
-                        <a href='#'><img className='footer-icon' src="/icons/instagramIcon.png" /></a>
-                        <a href='#'><img className='footer-icon' src="/icons/youtubeIcon.png" /></a>
-                        <a href='#'><img className='footer-icon' src="/icons/transmisionIcon.png" /></a>
+                        <a href='https://www.facebook.com/TransMilenio/' target="_blank"><img className='footer-icon' src="/icons/facebookIcon.png" /></a>
+                        <a href='https://twitter.com/transmilenio' target="_blank"><img className='footer-icon' src="/icons/twitterIcon.png" /></a>
+                        <a href='https://www.instagram.com/transmilenio/' target="_blank"><img className='footer-icon' src="/icons/instagramIcon.png" /></a>
+                        <a href='https://www.youtube.com/user/oficialtransmilenio' target="_blank"><img className='footer-icon' src="/icons/youtubeIcon.png" /></a>
+                        <a href='https://www.transmilenio.gov.co/loader.php?lServicio=RSS' target="_blank"><img className='footer-icon' src="/icons/transmisionIcon.png" /></a>
                     </div>
                     <div>
                         <br />
