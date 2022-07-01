@@ -157,7 +157,7 @@ const App = () => {
         </div>
         <div className="link-section">
           <a href="https://www.transmilenio.gov.co/" target="_blank">Ir a pagina Transmilenio</a> |
-          <Link to="/EDA"> Equipo de desarrollo</Link>
+          <Link to="/equipo-de-desarrollo"> Equipo de desarrollo</Link>
         </div>
       </div>
       <div className="main-title">

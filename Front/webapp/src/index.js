@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EDA from './EDA';
+import EquipoDesarrollo from './EquipoDesarrollo';
+import Footer from './Footer';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,9 +15,12 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/EDA" element={<EDA />} />
+        <Route path="/equipo-de-desarrollo" element={<EquipoDesarrollo />} />
       </Routes>
+
     </BrowserRouter>
+    <Footer />
+
   </React.StrictMode>
 );
 

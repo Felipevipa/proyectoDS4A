@@ -1,0 +1,38 @@
+.footer-wraper {
+    width: 100vw;
+    background-color: black;
+}
+
+.footer-container {
+    padding: 5%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+.white-text {
+    color: white;
+}
+
+.footer-container-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column3 {
+    align-items: center;
+}
+
+.footer-icon {
+    max-width: 50px;
+}
+
+.footer-icon:hover {
+    filter: invert(19%) sepia(58%) saturate(4140%) hue-rotate(3deg) brightness(108%) contrast(98%);
+    -webkit-filter: invert(19%) sepia(58%) saturate(4140%) hue-rotate(3deg) brightness(108%) contrast(98%);
+}
+
+.footer-colombia-icon {
+    max-width: 300px;
+}
