@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-wrapper {
+    width: 100vw;
+    height: fit-content;
+}
+
+.dashboard {
+    background-color: rgb(200, 200, 200);
+    display: grid;
+    padding: 10px;
+    max-width: 100%;
+    max-height: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+    /* grid-template-areas:
+        "primero tercero cuarto quinto"
+        "segundo tercero cuarto sexto"
+        "septimo noveno decimo onceavo"
+        "octavo noveno decimo onceavo";
+*/
+}
+
+.primero {
+    /* grid-area: primero; */
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.segundo {
+    /* grid-area: segundo; */
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.tercero {
+    /* grid-area: tercero; */
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+.cuarto {
+    /* grid-area: cuarto; */
+    grid-column: 3;
+    grid-row: 1 / span 2;
+}
+
+.quinto {
+    /* grid-area: quinto; */
+    grid-column: 4;
+    grid-row: 1;
+}
+
+.sexto {
+    /* grid-area: sexto; */
+    grid-column: 4;
+    grid-row: 2;
+}
+
+.septimo {
+    /* grid-area: septimo; */
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.octavo {
+    /* grid-area: octavo; */
+    grid-column: 1;
+    grid-row: 4;
+}
+
+.noveno {
+    /* grid-area: noveno; */
+    grid-column: 2;
+    grid-row: 3 / span 2;
+}
+
+
+.decimo {
+    /* grid-area: decimo; */
+    grid-column: 3;
+    grid-row: 3 / span 2;
+}
+
+.onceavo {
+    /* grid-area: onceavo; */
+    grid-column: 4;
+    grid-row: 3 / span 2;
+}
+
+.graph-container {
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+}
