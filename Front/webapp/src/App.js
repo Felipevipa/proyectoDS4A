@@ -18,6 +18,7 @@ import "./App.css";
 import CurrentLocation from "./Utilities/CurrentLocation";
 
 import { Link } from 'react-router-dom'
+import axios from "axios";
 
 const geojsonObject = mapConfig.geojsonObject;
 const geojsonObject2 = mapConfig.geojsonObject2;
@@ -156,9 +157,16 @@ const App = () => {
     }
 
     console.log(data)
-    setShowForm(false)
 
-    setEstimacion(floatToTimeString(1.2))
+    axios.post('http://localhost:5000', data)
+      .then(response => {
+        setEstimacion(floatToTimeString(response.data.result))
+        setShowForm(false)
+
+      })
+
+
+    // setEstimacion(floatToTimeString(1.2))
   }
 
 
