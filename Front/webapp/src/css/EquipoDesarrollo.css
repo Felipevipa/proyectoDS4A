@@ -97,3 +97,10 @@
     background-color: rgb(255, 255, 255);
     padding: 20px;
 }
+
+
+.select-container {
+    display: flex;
+    margin-left: 40rem;
+    margin-right: 40rem;
+}
