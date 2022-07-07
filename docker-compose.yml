@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: felipevipa/proyectods4afrontend:v1
+    ports:
+      - "80:80"
+    restart: always
+
+  backend:
+    image: felipevipa/proyectods4abackend:v1
+    ports:
+      - "5000:5000"
+
+    restart: always
