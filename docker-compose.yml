@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    image: felipevipa/proyectods4afrontend:v1
+    image: felipevipa/proyectods4afrontend:v2
     ports:
       - "80:80"
     restart: always
