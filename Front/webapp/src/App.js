@@ -39,8 +39,10 @@ const App = () => {
   const [puntoSalida, setPuntoSalida] = useState("")
   const [puntoLlegada, setPuntoLlegada] = useState("")
   const [hora, setHora] = useState("")
+  const [estimacion, setEstimacion] = useState("")
   const [showForm, setShowForm] = useState(true)
   const [numeroCampo, setNumeroCampo] = useState(0)
+
 
   function addMarkers(lonLatArray) {
     var iconStyle = new Style({
@@ -110,11 +112,13 @@ const App = () => {
 
 
   const handleClick = (evt) => {
+
     var lonlat = transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
     console.log(lonlat)
     setShowMarker(false)
     // setFeatures(addMarkers([lonlat,[-74.10031803719421, 4.6066443389633065]]).concat(features))
     console.log("comparacion", numeroCampo == 0)
+
     if (campo == 0) {
       setFeatures([addPoint(lonlat), outFeatures[1], addLine([lonlat, transform(outFeatures[1].getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')])])
       setPuntoSalida(lonlat)
@@ -125,11 +129,36 @@ const App = () => {
       campo = 0
     }
 
+
+
+  }
+
+  function timeStringToFloat(time) {
+    var hoursMinutes = time.split(/[.:]/);
+    var hours = parseInt(hoursMinutes[0], 10);
+    var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+    return hours + minutes / 60;
+  }
+  function floatToTimeString(time) {
+    let n = new Date(0, 0);
+    n.setSeconds(time * 60 * 60);;
+    return n.toTimeString().slice(0, 8)
   }
 
   const encontrarTiempo = (e) => {
     e.preventDefault()
+    const data = {
+      hora_inicio: timeStringToFloat(hora),
+      x_origen: puntoSalida[0],
+      y_origen: puntoSalida[1],
+      x_parada: puntoLlegada[0],
+      y_parada: puntoLlegada[1]
+    }
+
+    console.log(data)
     setShowForm(false)
+
+    setEstimacion(floatToTimeString(1.2))
   }
 
 
@@ -168,9 +197,9 @@ const App = () => {
             <div>
               <div className="main-form">
                 <p>Punto de salida:</p>
-                <p className="icon-input-ubicacion">{puntoSalida}</p><br />
+                <p className="icon-input-ubicacion">{puntoSalida[0] + " " + puntoSalida[1]}</p><br />
                 <p>Punto de llegada:</p>
-                <p className="icon-input-ubicacion">{puntoLlegada}</p><br />
+                <p className="icon-input-ubicacion">{puntoLlegada[0] + " " + puntoLlegada[1]}</p><br />
                 <p>Hora de salida:</p>
                 <p className="icon-input-reloj">{hora}</p>
               </div>
@@ -178,9 +207,9 @@ const App = () => {
               <div className="horizontal-line"></div>
               <div className="main-form">
                 <p>Deberias llegar a tu destino a las:</p>
-                <p className="icon-input-reloj">{hora}</p><br/>
+                <p className="icon-input-reloj">{floatToTimeString(timeStringToFloat(estimacion) + timeStringToFloat(hora))}</p><br />
                 <p>Tiempo total:</p>
-                <p className="icon-input-reloj">{hora}</p><br/>
+                <p className="icon-input-reloj">{estimacion}</p><br />
               </div>
             </div>
           }
