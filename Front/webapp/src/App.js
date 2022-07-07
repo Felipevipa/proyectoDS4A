@@ -158,7 +158,7 @@ const App = () => {
 
     console.log(data)
 
-    axios.post('http://localhost:5000', data)
+    axios.post('/backend', data)
       .then(response => {
         setEstimacion(floatToTimeString(response.data.result))
         setShowForm(false)

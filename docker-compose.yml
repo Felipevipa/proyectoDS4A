@@ -1,15 +1,30 @@
 version: "3.9"
 
 services:
-  frontend:
-    image: felipevipa/proyectods4afrontend:v2
+
+  proxy:
+    image: felipevipa/proyectods4aproxyserver:v1
+    container_name: proxy
     ports:
-      - "80:80"
+      - "8080:80"
+    links:
+      - frontend
+      - backend
+      
+  frontend:
+    container_name: frontend
+    image: felipevipa/proyectods4afrontend:v2
+    # ports:
+    #   - "8080:80"
     restart: always
 
   backend:
+    container_name: backend
     image: felipevipa/proyectods4abackend:v1
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
 
     restart: always
+
+    # expose:
+    #   - 5000
