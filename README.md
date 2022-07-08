@@ -2,4 +2,4 @@
 
 
 #To run the project:
-run "docker-compose.yml up -d"
+use "docker-compose.yml up -d"
